@@ -1,0 +1,30 @@
+项目搭建
+    npm init webpack management
+代码规范
+    eslint 检查语法，不想要报错在package.json里面设置
+        "lintfix": "eslint --ext .js,.vue src --fix",
+        (按照规范修正代码---不会修正未使用的变量)
+
+    修改配置文件后要重新 npm run dev
+自定义指令
+    在package.json中的scripts中设置
+       "lintfix": "eslint --ext .js,.vue src --fix",
+
+element-ui
+    饿了么团队出品，在main.js文件中使用
+    先安装，在引入两个文件-->使用
+
+模版简化
+
+    删除模版中用不到的文件
+
+    --------------------------------------
+项目开始
+---登录--新建分支--login
+    新建一个分支，专门写登陆功能
+    git branch查看已经拥有的分支
+
+  新建分支  git checkout -b 分支名
+    注意:需要指定开发阶段还是生产阶段
+    新建组件+配置路由
+    代码的添加与提交(已经完成了一个小功能)
