@@ -1,3 +1,7 @@
+
+接口文档地址:http://manager.xiaomadagege.cn/static/api/docs/index.html
+
+
 项目搭建
     npm init webpack management
 代码规范
@@ -28,3 +32,37 @@ element-ui
     注意:需要指定开发阶段还是生产阶段
     新建组件+配置路由
     代码的添加与提交(已经完成了一个小功能)
+    --推送应该在主分支中完成(即git push)
+    
+    登录页面的样式
+        ---利用element-ui完成即可
+        注意属性绑定和直接给值的区别即有:和无:的情况
+
+    登陆--axios
+        axios不是vue的插件，需要做成vue的插件
+        
+        建立plugins文件夹，里面放自己写的插件--需要导出
+
+
+        写完插件---使用--在组件中用
+        --直接 this.$http.get(发送get请求))
+
+        登录页--发送post请求
+            
+            跳转页面（js编程式导航）--$this.$router.push({name:'home'})
+
+            加入提示功能----消息提示（elementui)
+
+        登陆成功---来到home组件
+
+
+
+
+
+
+
+
+
+一些项目知识点
+    babel是用来处理es6语法的
+    static中的文件webpack不会处理，可以直接引用

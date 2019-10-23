@@ -13,6 +13,6 @@ export default {
 <style>
 #app {
   /* eslint太严格了 */
-  font-size: 20px
+ height: 100%;
 }
 </style>
