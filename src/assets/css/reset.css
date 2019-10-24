@@ -3,3 +3,9 @@ html,body{
     padding: 0;
     height: 100%;
 }
+a:link,
+a:visited,
+a:hover,
+a:active {
+     text-decoration: none;
+}
