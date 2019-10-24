@@ -29,13 +29,13 @@
           v-model="formdata.password"
           placeholder="请输入密码"
           autocomplete="off"
-        ></el-input>
+         @keyup.native.enter="handleLogin"></el-input>
       </el-form-item>
       <el-button
         type="primary"
         class="login-btn"
         @click="handleLogin"
-      >登录</el-button>
+     >登录</el-button>
       <el-button
         type="danger"
         @click="resetForm('formdata')"
@@ -68,6 +68,8 @@ export default {
 
   methods: {
     handleLogin () {
+      console.log(111)
+
       this.$http
         .post('login', this.formdata)
         .then(res => {
@@ -76,9 +78,12 @@ export default {
           // eslint-disable-next-line no-unused-vars
           const { data, meta: { msg, status } } = res.data
           if (status === 200) {
+            // 保存token值，--token值有无判断有没有登陆
+            localStorage.setItem('token', data.token)
+            // 提示信息
             this.$message.success(msg)
             // 成功则进行页面的跳转----
-            // 去home页--主页--注意路由设置
+            // 去home页--主页--注意路由设置-------跳转页面
             this.$router.push({ name: 'home' })
           } else {
             this.$message.error(msg)

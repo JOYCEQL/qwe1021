@@ -53,8 +53,17 @@ element-ui
 
             加入提示功能----消息提示（elementui)
 
-        登陆成功---来到home组件
+            代码优化--发送请求部分
+                使用es7的async和await使代码看起来是同步
 
+                点击enter键实现登陆------
+            token值---后台有token值，才让登陆，一种安全验证---判断用户是否登陆过
+        登陆成功---保存token
+               成功时将token值保存在本地存储---去下一个页面要检测有没有这个值     
+                
+                
+        
+        首页--布局容器
 
 
 
@@ -66,3 +75,15 @@ element-ui
 一些项目知识点
     babel是用来处理es6语法的
     static中的文件webpack不会处理，可以直接引用
+
+
+
+
+
+问题
+    目的：实现按enter键登陆，并没有生效 ----原因和element-ui有关系
+     @keyup.enter="handleLogin" 不生效
+
+
+     解决办法
+     @keyup.native.enter="handleLogin"
