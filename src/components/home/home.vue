@@ -31,10 +31,12 @@
     </el-header>
     <el-container>
       <!-- 左侧部分 -->
+      <!-- 开启路由 -->
       <el-aside width="200px">
         <el-menu
           class="el-menu-vertical-demo"
           :unique-opened="true"
+          :router="true"
         >
           <el-submenu index="1">
             <!-- 1 -->
@@ -43,7 +45,8 @@
               <span>用户管理</span>
             </template>
             <!-- 2 -->
-            <el-menu-item index="1-1">
+            <!-- 这里的index值则是路由的path值 -->
+            <el-menu-item index="users">
               <i class="el-icon-menu"></i>
               <span>用户列表</span>
             </el-menu-item>
@@ -111,7 +114,9 @@
         </el-menu>
       </el-aside>
       <!-- 右侧部分 -->
-      <el-main></el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>

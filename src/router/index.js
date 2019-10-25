@@ -5,6 +5,8 @@ import Router from 'vue-router'
 import Login from '@/components/login/login.vue'
 // 导入home组件
 import Home from '../components/home/home.vue'
+// 导入users组件
+import Users from '../components/users/users.vue'
 // 写完组件需要在这里配置路由
 Vue.use(Router)
 
@@ -14,14 +16,20 @@ export default new Router({
     path: '/login',
     component: Login
   },
-  // { // 默认重定向到login
-  //   path: '/',
-  //   redirect: '/login'
-  // },
+
   {
     name: 'home',
     path: '/',
-    component: Home
+    component: Home,
+    // 注意:users组件的路由需要在home的路由里面配置-父子关系
+    children: [
+      {
+        // 这里的path不加/
+        name: 'users',
+        path: 'users',
+        component: Users
+      }
+    ]
 
   }
   ]
