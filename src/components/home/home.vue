@@ -216,7 +216,7 @@ img {
 
 .el-header {
   padding: 0;
-  background-color: #b3c0d1;
+  background-color: #409EFF;
   color: #333;
   text-align: center;
   line-height: 60px;
@@ -230,9 +230,7 @@ img {
 }
 
 .el-main {
-  background-color: pink;
+  background-color: #67C23A;
   color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 </style>

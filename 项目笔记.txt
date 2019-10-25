@@ -90,6 +90,15 @@ element-ui
             index="users"
             新建users组件
             配置路由---注意要在home的路由配置里面配
+          首页-----用户管理--用户列表---样式搭建
+             布局容器--- 卡片容器--card 卡片
+                面包屑导航
+                搜索
+                表格
+                分页
+           首页----用户管理---用户列表--设置请求头
+                发送数据请求页面时---拿到的数据为空
+                原因：需要设置请求头--拿到toekn值--(除了登陆之外的接口，其他接口都需要获得授权)      this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN
 
 
 
