@@ -1,7 +1,7 @@
 <template>
   <!-- 这里的el-container就是根元素 -->
   <el-container class="container">
-    <el-header >
+    <el-header>
       <el-row>
         <el-col :span="4">
           <div class="grid-content bg-purple clearfix">
@@ -18,8 +18,13 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
+            <template>
 
-              <el-button type="danger"  @click="handleexit">退出</el-button>
+              <el-button
+                type="danger"
+                @click="handleexit"
+              >退出</el-button>
+            </template>
           </div>
         </el-col>
       </el-row>
@@ -27,7 +32,10 @@
     <el-container>
       <!-- 左侧部分 -->
       <el-aside width="200px">
-        <el-menu class="el-menu-vertical-demo"    :unique-opened="true" >
+        <el-menu
+          class="el-menu-vertical-demo"
+          :unique-opened="true"
+        >
           <el-submenu index="1">
             <!-- 1 -->
             <template slot="title">
@@ -115,17 +123,34 @@ export default {
     const token = localStorage.getItem('token')
     // 没有则回到登录页
     if (!token) {
-      this.$router.push({name: 'login'})
+      this.$router.push({ name: 'login' })
     }
   },
   methods: {
     handleexit () {
-      // 清空token值
-      // 提示消息
-      // 去登录页
-      localStorage.clear()
-      this.$message.success('退出成功')
-      this.$router.push({name: 'login'})
+      // 弹框---你确定要退出吗
+      this.$confirm('您确定要退出吗', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        // 清空token值
+        // 提示消息
+        // 去登录页
+        localStorage.clear()
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        })
+        // this.$message.success('退出成功')
+        this.$router.push({ name: 'login' })
+      }).catch(() => {
+        this.$message({
+          type: 'warning',
+          message: '已取消退出'
+        })
+      })
     }
   }
 }
@@ -141,36 +166,35 @@ export default {
 }
 
 element.style {
-    padding-left: 40px;
+  padding-left: 40px;
 }
 .el-submenu .el-menu-item {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 45px;
-    min-width: 200px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 45px;
+  min-width: 200px;
 }
-.el-menu-item{
-color: #fff;
+.el-menu-item {
+  color: #fff;
 }
-.el-submenu__title{
-    color: #fff;
-
+.el-submenu__title {
+  color: #fff;
 }
-.el-submenu__title:hover{
-    background-color: #292c36;
-
+.el-submenu__title:hover {
+  background-color: #292c36;
 }
 element.style {
-    padding-left: 40px;
+  padding-left: 40px;
 }
 .el-submenu .el-menu-item {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 45px;
-    min-width: 200px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 45px;
+  min-width: 200px;
 }
 
-.el-menu-item:focus, .el-menu-item:hover{
+.el-menu-item:focus,
+.el-menu-item:hover {
   background-color: #292c36;
 }
 h2 {
