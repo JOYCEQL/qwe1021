@@ -19,14 +19,14 @@
         <el-col :span="2">
           <div class="grid-content bg-purple">
 
-              <el-button type="danger" >退出</el-button>
+              <el-button type="danger"  @click="handleexit">退出</el-button>
           </div>
         </el-col>
       </el-row>
     </el-header>
     <el-container>
       <!-- 左侧部分 -->
-      <el-aside>
+      <el-aside width="200px">
         <el-menu class="el-menu-vertical-demo"    :unique-opened="true" >
           <el-submenu index="1">
             <!-- 1 -->
@@ -117,6 +117,16 @@ export default {
     if (!token) {
       this.$router.push({name: 'login'})
     }
+  },
+  methods: {
+    handleexit () {
+      // 清空token值
+      // 提示消息
+      // 去登录页
+      localStorage.clear()
+      this.$message.success('退出成功')
+      this.$router.push({name: 'login'})
+    }
   }
 }
 </script>
@@ -172,8 +182,7 @@ h2 {
 img {
   float: left;
   display: block;
-  margin-left: 150px;
-  transform: translateX(-50%);
+  margin-left: 50px;
 }
 
 .el-header {

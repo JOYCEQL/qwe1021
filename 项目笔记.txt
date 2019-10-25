@@ -72,6 +72,11 @@ element-ui
             进入首页的权限验证---token值
                 在beforeCreated中判断localstorage中是否有token值，有则继续，没有继续渲染页面
 
+            退出功能
+                清空token值  ----------      localStorage.clear()
+                有一个“退出成功的提示”
+                回到登陆页面  
+                注意：点击事件名字不能注册exit，否则会有大量报错，虽不影响功能  
 
 
 
