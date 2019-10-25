@@ -110,8 +110,14 @@
 
 <script>
 export default {
-  name: 'vueName'
-
+  // 判断有无token值
+  beforeCreate () {
+    const token = localStorage.getItem('token')
+    // 没有则回到登录页
+    if (!token) {
+      this.$router.push({name: 'login'})
+    }
+  }
 }
 </script>
 
