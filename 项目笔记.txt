@@ -64,7 +64,10 @@ element-ui
                 
         
         首页--布局容器
-            结构使用element
+            结构使用element 顶部--layout 三部分
+            侧边栏 :侧边栏菜单 el-menu
+                 index值一样都会打开---所以设为不一样
+                 router ----- 开启路由模式。  Index==path值（是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转	）
 
 
 
@@ -87,3 +90,8 @@ element-ui
 
      解决办法
      @keyup.native.enter="handleLogin"
+
+
+     -------主页(home.vue)  
+        点击侧边栏，头部跟着动，
+        原因 :侧边栏高度超出浏览器高度

@@ -9,3 +9,14 @@ a:hover,
 a:active {
      text-decoration: none;
 }
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    content: " ";
+    clear: both;
+  }
+  
+  .clearfix {
+    zoom: 1;
+  }
+  
