@@ -15,6 +15,7 @@
             v-model="query"
             class="inputSearch"
             clearable
+            @clear="reGetUsers"
           >
             <el-button
               slot="append"
@@ -23,9 +24,79 @@
             ></el-button>
           </el-input>
           <!-- 添加用户按钮 -->
-          <el-button type="primary">添加用户</el-button>
+          <el-button
+            type="primary"
+            @click="dialogFormVisible = true"
+          >添加用户</el-button>
         </el-col>
       </el-row>
+      <!-- 对话框 -->
+      <el-dialog
+        title="添加用户"
+        :visible.sync="dialogFormVisible"
+      >
+        <!-- 内部表单 -->
+        <el-form
+          :model="form"
+          :rules="Addformrules"
+        >
+          <!-- 用户名 -->
+          <el-form-item
+            label="用户名"
+            :label-width="formLabelWidth"
+            prop="username"
+          >
+            <el-input
+              v-model="form.username"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item
+            label="密码"
+            :label-width="formLabelWidth"
+            prop="password"
+          >
+            <el-input
+              v-model="form.password"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 邮箱 -->
+          <el-form-item
+            label="邮箱"
+            :label-width="formLabelWidth"
+            prop="email"
+          >
+            <el-input
+              v-model="form.email"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 手机号 -->
+          <el-form-item
+            label="手机号"
+            :label-width="formLabelWidth"
+            prop="mobile"
+          >
+            <el-input
+              v-model="form.mobile"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+
+        </el-form>
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="Addusers"
+          >确 定</el-button>
+        </div>
+      </el-dialog>
       <!-- 表格 -->
       <el-table
         :data="userList"
@@ -126,7 +197,35 @@ export default {
       pagesize: 2,
       total: 0,
       // 里面的数据根据发送请求拿到，由每一列的prop绑定
-      userList: []
+      userList: [],
+      // 添加用户对话框
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      // 添加用户的表单数据
+      form: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      formLabelWidth: '100px',
+      // 添加用户部分表单校验
+      Addformrules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' }
+        ]
+      }
     }
   },
   created () {
@@ -141,7 +240,6 @@ export default {
       this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN
       const res = await this.$http.get(`users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`)
 
-      console.log(res)
       // 结果的结构赋值
       const { meta: { status, msg }, data: { users, total } } = res.data
       if (status === 200) {
@@ -168,8 +266,33 @@ export default {
     // 搜索用户
     searchUsers () {
       this.getUserList()
-    }
+    },
+    reGetUsers () {
+      this.getUserList()
+    },
+    // 添加用户
+    Addusers () {
+      // 发送请求添加数据
+      const AUTH_TOKEN1 = localStorage.getItem('token')
+      this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN1
+      this.$http.post('users', this.form)
+        .then(res => {
+          console.log(res)
 
+          // eslint-disable-next-line no-unused-vars
+          const { data, meta: { msg, status } } = res.data
+          if (status === 201) {
+            console.log(msg)
+            this.getUserList()
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+
+      // 隐藏模态框
+      this.dialogFormVisible = false
+    }
   }
 
 }

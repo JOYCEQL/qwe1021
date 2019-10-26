@@ -68,8 +68,6 @@ export default {
 
   methods: {
     handleLogin () {
-      console.log(111)
-
       this.$http
         .post('login', this.formdata)
         .then(res => {
