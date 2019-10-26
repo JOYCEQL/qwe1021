@@ -7,17 +7,19 @@
         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
         <el-breadcrumb-item>用户列表</el-breadcrumb-item>
       </el-breadcrumb>
-      <!-- 搜索输入框-->
+      <!-- 搜索-->
       <el-row class="searchRow">
         <el-col>
           <el-input
             placeholder="请输入内容"
             v-model="query"
             class="inputSearch"
+            clearable
           >
             <el-button
               slot="append"
               icon="el-icon-search"
+              @click="searchUsers"
             ></el-button>
           </el-input>
           <!-- 添加用户按钮 -->
@@ -161,6 +163,10 @@ export default {
       // val是当前的页码--根据点击页码进行切换
       // 把this.pagenum赋值为val
       this.pagenum = val
+      this.getUserList()
+    },
+    // 搜索用户
+    searchUsers () {
       this.getUserList()
     }
 

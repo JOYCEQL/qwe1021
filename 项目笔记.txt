@@ -93,13 +93,17 @@ element-ui
           首页-----用户管理--用户列表---样式搭建
              布局容器--- 卡片容器--card 卡片
                 面包屑导航
-                搜索
+                搜索 -----input输入框
                 表格
                 分页
            首页----用户管理---用户列表--设置请求头
                 发送数据请求页面时---拿到的数据为空
                 原因：需要设置请求头--拿到toekn值--(除了登陆之外的接口，其他接口都需要获得授权)     
                  this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN
+
+                 vue中的axios请求：     
+                  const res = await this.$http.get(`users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`)
+
             首页----用户管理---用户列表--表格-状态
                 开关按钮属于子组件加入到父组件中。--注意其写法
             
@@ -107,8 +111,10 @@ element-ui
                     两个事件处理函数完成分页
                     瑕疵:点击页码之后的序号(索引)不连续---未解决
                 
-            
-
+            首页----用户管理---用户列表--搜索用户
+                    查询列表方法中已经拼入了query,所以点击按钮直接渲染即可
+                    input   v-model---query,即传递query过去
+                    清空input框-----使用提供的clearable属性显示后面的错号
 
 
 一些项目知识点
