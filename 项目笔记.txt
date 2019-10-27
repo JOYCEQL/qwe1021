@@ -117,8 +117,28 @@ element-ui
                     清空input框-----使用提供的clearable属性显示后面的错号
                     ---功能完善，点击X清空Input框重新获取数据---触发clear事件
             首页----用户管理---用户列表--添加用户
-                    点击按钮,弹出对话框
+                    点击按钮,弹出对话框---
+                    数据校验完成后
+                    点击按钮发送请求，将数据添加到后台
+                    重新获取数据
+            首页----用户管理---用户列表--删除用户
+                         点击按钮把id传给后台，-后台根据id删除对应的数据(id作为参数在删除的事件中传递)
+                         注意点:接口文档中是:id,发送请求的时候不能加：
+                        删除后回到第一页
+            首页----用户管理---用户列表--显示编辑对话框
+                    点击编辑按钮显示对话框---编辑按钮能够利用(scope.row拿到这一行的数据)
+                    数据回填----数据----拿到的将数据作为参数传递，在showEdit方法进行赋值 this.form=形参
+                    数据回填及修改----把数据浅拷贝一份，否则修改对话框的值页面也会跟着变
+             首页----用户管理---用户列表--修改编辑话框中表单的值
+                    点击对话框确定按钮，提交数据----发送put请求，参数还是对象形式-------this.editForm
+                    this.editForm已经拿到id---直接进行赋值id=this.editForm即可得到id------注意传值
+            首页----用户管理---用户列表--分配角色--表单填充渲染
+                    注意:需要发送两个请求
+                    请求1：获取所有角色。动态渲染到下拉框中----
+                    请求2：获取当前要修改元素的角色id,通过用户id来获取角色的id
+                    目的:为了让下拉框有默认的显示---即当前的角色
 
+                    此外:需要注意select和option的关系---select中的v-model绑定的是option的value的值--(label负责显示这个值)
 
 一些项目知识点
     babel是用来处理es6语法的
@@ -129,7 +149,7 @@ element-ui
 
 
 问题
-    目的：实现按enter键登陆，并没有生效 ----原因和element-ui有关系
+    1.目的：实现按enter键登陆，并没有生效 ----原因和element-ui有关系
      @keyup.enter="handleLogin" 不生效
 
 
@@ -137,11 +157,18 @@ element-ui
      @keyup.native.enter="handleLogin"
 
 
-     -------主页(home.vue)  
+     2.-------主页(home.vue)  
         点击侧边栏，头部跟着动，
         原因 :侧边栏高度超出浏览器高度
 
 
-    [Vue warn]: Invalid prop: type check failed for prop "total". Expected Number with value 0, got String with value "".
+    3.[Vue warn]: Invalid prop: type check failed for prop "total". Expected Number with value 0, got String with value "".
 
     解决办法：total应该给数字类型
+
+
+    4.无法使用同步形式的代码报错如下----
+        await is a reserved word    
+    解决办法
+        await要和离他最近的函数配合使用
+    

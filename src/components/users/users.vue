@@ -30,7 +30,7 @@
           >添加用户</el-button>
         </el-col>
       </el-row>
-      <!-- 对话框 -->
+      <!-- 添加用户的对话框 -->
       <el-dialog
         title="添加用户"
         :visible.sync="dialogFormVisible"
@@ -93,11 +93,128 @@
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
             type="primary"
-            @click="Addusers"
+            @click="Addusers()"
           >确 定</el-button>
         </div>
       </el-dialog>
-      <!-- 表格 -->
+      <!-- 编辑用户的对话框 -->
+      <el-dialog
+        title="编辑用户"
+        :visible.sync="EditVisible"
+      >
+        <!-- 内部表单 -->
+        <el-form :model="editForm">
+          <!-- 用户名 -->
+          <el-form-item
+            label="用户名"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              disabled
+              v-model="editForm.username"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 邮箱 -->
+          <el-form-item
+            label="邮箱"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              v-model="editForm.email"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 手机号 -->
+          <el-form-item
+            label="手机号"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              v-model="editForm.mobile"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+
+        </el-form>
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button @click="EditVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="Edituser()"
+          >确 定</el-button>
+          <!-- 需要在这里把id传过去 -->
+        </div>
+      </el-dialog>
+
+      <!-- 分配角色对话框 -->
+      <el-dialog
+        title="分配角色"
+        :visible.sync="assignVisible"
+      >
+        <!-- 内部表单 -->
+        <el-form>
+          <!-- 用户名 -->
+          <el-form-item
+            label="当前用户 "
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              disabled
+              v-model="currentusername"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 当前角色 -->
+          <el-form-item
+            label="当前的角色"
+            :label-width="formLabelWidth"
+          >
+            {{currentrolename}}
+          </el-form-item>
+
+          <!-- 选择角色下拉菜单 -->
+          <el-form-item
+            label="分新配角色"
+            :label-width="formLabelWidth"
+          >
+            <!-- 选择角色 -->
+            <el-select
+              v-model="currentroleid"
+              placeholder="请选择角色"
+            >
+              <!-- 有一个默认的请选择 -->
+              <el-option
+                label="请选择"
+                :value="1"
+              ></el-option>
+              <el-option
+                v-for="item in roles"
+                :key="item.rid"
+                :label="item.roleName"
+                :value="item.id"
+              ></el-option>
+
+            </el-select>
+          </el-form-item>
+
+        </el-form>
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button @click="assignVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="Assignuser()"
+          >确 定</el-button>
+          <!-- 需要在这里把角色id传过去 -->
+        </div>
+      </el-dialog>
+      <!-- 渲染在页面中的表格 -->
       <el-table
         :data="userList"
         stripe
@@ -156,17 +273,23 @@
               type="primary"
               plain
               icon="el-icon-edit"
+              @click="showedit(scope.row)"
             ></el-button>
+            <!-- 展示编辑 -->
+            <!-- scope.row代表某个用户数据 -->
+
             <el-button
               size=mini
               type="danger"
               plain
+              @click="showdel(scope.row.id)"
               icon="el-icon-delete"
             ></el-button>
             <el-button
               size=mini
               type="success"
               plain
+              @click="showAssignuser(scope.row)"
               icon="el-icon-check"
             ></el-button>
           </template>
@@ -178,7 +301,7 @@
         @current-change="handleCurrentChange"
         :current-page="pagenum"
         :page-sizes="[2, 4, 6, 8]"
-        :page-size="2"
+        :page-size="6"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       >
@@ -194,13 +317,15 @@ export default {
     return {
       query: '',
       pagenum: 1,
-      pagesize: 2,
+      pagesize: 6,
       total: 0,
       // 里面的数据根据发送请求拿到，由每一列的prop绑定
       userList: [],
       // 添加用户对话框
       dialogTableVisible: false,
       dialogFormVisible: false,
+      EditVisible: false,
+      assignVisible: false,
       // 添加用户的表单数据
       form: {
         username: '',
@@ -208,6 +333,22 @@ export default {
         email: '',
         mobile: ''
       },
+      // 一个form表单不够
+      editForm: {
+        id: '',
+        username: '',
+        email: '',
+        mobile: ''
+      },
+
+      currentrolename: '',
+      currentusername: '',
+      currentroleid: '',
+      currentuserid: '',
+      // 分配角色表单
+
+      // 存放所有的角色
+      roles: [],
       formLabelWidth: '100px',
       // 添加用户部分表单校验
       Addformrules: {
@@ -239,11 +380,11 @@ export default {
       const AUTH_TOKEN = localStorage.getItem('token')
       this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN
       const res = await this.$http.get(`users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`)
-
       // 结果的结构赋值
       const { meta: { status, msg }, data: { users, total } } = res.data
       if (status === 200) {
         this.userList = users
+
         this.total = total
         this.$message.success(msg)
       } else {
@@ -277,12 +418,12 @@ export default {
       this.$http.defaults.headers.common['Authorization'] = AUTH_TOKEN1
       this.$http.post('users', this.form)
         .then(res => {
-          console.log(res)
+          // console.log(res)
 
           // eslint-disable-next-line no-unused-vars
           const { data, meta: { msg, status } } = res.data
           if (status === 201) {
-            console.log(msg)
+            this.$message.success(msg)
             this.getUserList()
           }
         })
@@ -292,6 +433,87 @@ export default {
 
       // 隐藏模态框
       this.dialogFormVisible = false
+    },
+    // 显示删除的框
+    showdel (userid) {
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        // 发送请求删除数据
+
+        const res = await this.$http.delete(`users/${userid}`
+        )
+        console.log(res)
+
+        if (res.data.meta.status === 200) {
+          this.pagenum = 1
+          this.getUserList()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // 展示编辑框
+    showedit (user) {
+      // 数据回填且禁用--点击时数据再获取数据
+
+      // console.log(user)
+      // 浅拷贝
+      const newuser = { ...user }
+      this.editForm = newuser
+      this.EditVisible = true
+    },
+    // 编辑数据发送修改请求--相当于定义了一个局部变量id---即不用外面传--第406行
+    async Edituser (id) {
+      this.EditVisible = false
+      id = this.editForm.id
+      const res = await this.$http.put(`users/${id}`, this.editForm)
+      if (res.data.meta.status === 200) {
+        this.$message.success(res.data.meta.msg)
+        this.getUserList()
+      } else {
+        this.$message.warning(res.data.meta.msg)
+      }
+    },
+    // 显示分配角色对话框
+    async  showAssignuser (users) {
+      this.assignVisible = true
+      // 浅拷贝
+      this.currentusername = users.username
+      this.currentuserid = users.id
+      this.currentrolename = users.role_name
+
+      // 获取所有的角色
+      let allusers = await this.$http.get('roles')
+      // 遍历这个数组进行渲染
+      this.roles = allusers.data.data
+
+      // 获取当前角色的id----注意：需要角色id---
+      let res = await this.$http.get(`users/${this.currentuserid}`)
+      // 拿到角色id
+
+      this.currentroleid = res.data.data.rid
+    },
+    // 分配角色---点击确定按钮发送请求修改角色
+    async  Assignuser () {
+      const res = await this.$http.put(`users/${this.currentuserid}/role`, {
+        rid: this.currentroleid
+      })
+      console.log(res)
+      if (res.status === 200) {
+        this.getUserList()
+        this.$message.success(res.data.meta.msg)
+        this.assignVisible = false
+      }
     }
   }
 
